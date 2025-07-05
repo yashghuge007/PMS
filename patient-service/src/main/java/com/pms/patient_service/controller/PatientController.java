@@ -23,7 +23,8 @@ import java.util.UUID;
 @Tag(name = "Patient", description = "API to manage Patients")
 public class PatientController {
 
-  @Autowired private PatientService patientService;
+  @Autowired
+  private PatientService patientService;
 
   @GetMapping
   public ResponseEntity<List<PatientResponseDto>> getPatients() {

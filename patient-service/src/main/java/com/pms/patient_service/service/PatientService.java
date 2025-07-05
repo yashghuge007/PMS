@@ -4,11 +4,12 @@ import com.pms.patient_service.dto.PatientRequestDto;
 import com.pms.patient_service.dto.PatientResponseDto;
 import com.pms.patient_service.exception.EmailAlreadyExistsException;
 import com.pms.patient_service.exception.PatientNotFoundException;
+import com.pms.patient_service.grpc.BillingServiceGrpcClient;
+import com.pms.patient_service.kafka.CustomKafkaProducer;
 import com.pms.patient_service.mapper.PatientMapper;
 import com.pms.patient_service.model.Patient;
 import com.pms.patient_service.repository.PatientRepository;
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +19,14 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-@NoArgsConstructor
 public class PatientService {
 
   @Autowired
-  private PatientRepository patientRepository;
+  private final BillingServiceGrpcClient billingServiceGrpcClient;
+  @Autowired
+  private final PatientRepository patientRepository;
+  @Autowired
+  private final CustomKafkaProducer kafkaProducer;
 
   public List<PatientResponseDto> getPatients() {
     List<Patient> patients = patientRepository.findAll();
@@ -35,6 +39,9 @@ public class PatientService {
     }
 
     Patient patient = patientRepository.save(PatientMapper.toModel(patientRequestDto));
+    billingServiceGrpcClient.createBillingAccount(patient.getId().toString(), patient.getName(), patient.getEmail());
+    kafkaProducer.sendEvent(patient);
+
     return PatientMapper.toDTO(patient);
   }
 
