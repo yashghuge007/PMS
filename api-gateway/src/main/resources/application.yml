@@ -1,0 +1,56 @@
+server:
+  port: 4004
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        #        - id: patient-service-route
+        #          uri: http://patient-service:4000
+        #          predicates:
+        #            - Path=/api/patients/**
+        #          filters:
+        #            - RewritePath=/api/patients(?<segment>/?.*),/api/v1/patients${segment}
+        #
+        #        - id: api-docs-patient-service-route
+        #          uri: http://patient-service:4000
+        #          predicates:
+        #            - Path=/api-docs/patients
+        #          filters:
+        #            - RewritePath=/api-docs/patients,/v3/api-docs
+
+        #        - id: generic-api-route
+        #          uri: http://localhost:4000
+        #          predicates:
+        #            - Path=/api/**
+        #          filters:
+        #            - RewritePath=/api/(?<segment>.*),/api/v1/${segment}
+
+        - id: patient-service-route-local
+          uri: http://localhost:4000
+          predicates:
+            - Path=/api/patients/**
+          filters:
+            # - StripPrefix = 1
+            - RewritePath=/api/patients(?<segment>/?.*),/api/v1/patients${segment}
+
+        - id: api-docs-patient-service-route-local
+          uri: http://localhost:4000
+          predicates:
+            - Path=/api-docs/patients
+          filters:
+            - RewritePath=/api-docs/patients,/v3/api-docs
+#logging:
+#  level:
+#    org.springframework.cloud.gateway: DEBUG
+#    reactor.netty.http.client: DEBUG
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: patient-service
+        url: /api-docs/patients
+#      - name: doctor-service
+#        url: /api-docs/doctors
