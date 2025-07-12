@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
+@RequestMapping("/auth/api/v1")
 @AllArgsConstructor
 public class AuthController {
   @Autowired
   private final AuthService authService;
 
-  @PostMapping("api/v1/login")
+  @PostMapping("/login")
   public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto) {
     Optional<String> tokenOptional = authService.authenticate(loginRequestDto);
     if (tokenOptional.isEmpty()) {
