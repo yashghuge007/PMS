@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/auth/api/v1")
+@RequestMapping("/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
   @Autowired
@@ -28,7 +28,7 @@ public class AuthController {
     return ResponseEntity.ok(new LoginResponseDto(token));
   }
 
-  @GetMapping("api/v1/validate")
+  @GetMapping("/validate")
   public ResponseEntity<Void> validateToken(@RequestHeader("Authorization") String authHeader) {
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();

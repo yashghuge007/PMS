@@ -42,6 +42,7 @@ spring:
           filters:
             # - StripPrefix = 1
             - RewritePath=/api/patients(?<segment>/?.*),/api/v1/patients${segment}
+            - JwtValidation
 
         - id: api-docs-patient-service-route-local
           uri: http://localhost:4000

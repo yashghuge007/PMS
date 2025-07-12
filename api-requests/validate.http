@@ -1,0 +1,5 @@
+
+### request
+GET http://localhost:4004/api/auth/validate
+Accept: application/json
+Authorization: Bearer {{token}}
